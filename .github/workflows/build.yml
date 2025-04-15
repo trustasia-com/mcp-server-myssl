@@ -1,0 +1,77 @@
+name: Cross-Platform Build and Release
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            output: mcp-server-myssl-linux
+          - os: windows-latest
+            output: mcp-server-myssl-windows.exe
+          - os: macos-latest
+            output: mcp-server-myssl-macos
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.24.x'
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Build
+      run: go build -v -o ${{ matrix.output }} .
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: ${{ matrix.output }}
+        path: ${{ matrix.output }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4.2.1
+    
+    - name: List directory structure for debugging
+      run: find . -type f | sort
+
+    - name: Prepare Release Files
+      run: |
+        mkdir -p release
+        cp mcp-server-myssl-linux/mcp-server-myssl-linux release/mcp-server-myssl-linux
+        cp mcp-server-myssl-windows.exe/mcp-server-myssl-windows.exe release/mcp-server-myssl-windows.exe
+        cp mcp-server-myssl-macos/mcp-server-myssl-macos release/mcp-server-myssl-macos
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release/mcp-server-myssl-linux
+          release/mcp-server-myssl-windows.exe
+          release/mcp-server-myssl-macos
+        name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
