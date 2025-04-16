@@ -1,5 +1,5 @@
 
-# MCP-Server-MySSL
+# myssl-mcp-server
 
 An MCP server implementation that provides domain and IP security checking capabilities through the MySSL API.
 
@@ -31,7 +31,7 @@ To use this MCP server, you need to register it with your AI client:
 
 1. Open your AI client's plugin/extension management interface
 2. Add a new MCP server with:
-- Name: `mcp-server-myssl`
+- Name: `myssl-mcp-server`
 - Version: `1.0.0`
 - Command: Path to the executable
 - Working Directory: Where you extracted the files
@@ -59,4 +59,4 @@ Example prompt in your AI client:
 ## Development
 
 Building from source:  
-`go build -o mcp-server-myssl .`
+`go build -o myssl-mcp-server .`
