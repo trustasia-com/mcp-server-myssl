@@ -17,11 +17,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            output: mcp-server-myssl-linux
+            output: myssl-mcp-server-linux
           - os: windows-latest
-            output: mcp-server-myssl-windows.exe
+            output: myssl-mcp-server-windows.exe
           - os: macos-latest
-            output: mcp-server-myssl-macos
+            output: myssl-mcp-server-macos
 
     steps:
     - uses: actions/checkout@v3
@@ -59,17 +59,17 @@ jobs:
     - name: Prepare Release Files
       run: |
         mkdir -p release
-        cp mcp-server-myssl-linux/mcp-server-myssl-linux release/mcp-server-myssl-linux
-        cp mcp-server-myssl-windows.exe/mcp-server-myssl-windows.exe release/mcp-server-myssl-windows.exe
-        cp mcp-server-myssl-macos/mcp-server-myssl-macos release/mcp-server-myssl-macos
+        cp myssl-mcp-server-linux/myssl-mcp-server-linux release/myssl-mcp-server-linux
+        cp myssl-mcp-server-windows.exe/myssl-mcp-server-windows.exe release/myssl-mcp-server-windows.exe
+        cp myssl-mcp-server-macos/myssl-mcp-server-macos release/myssl-mcp-server-macos
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          release/mcp-server-myssl-linux
-          release/mcp-server-myssl-windows.exe
-          release/mcp-server-myssl-macos
+          release/myssl-mcp-server-linux
+          release/myssl-mcp-server-windows.exe
+          release/myssl-mcp-server-macos
         name: Release ${{ github.ref_name }}
         draft: false
         prerelease: false
