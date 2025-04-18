@@ -25,6 +25,8 @@ An MCP server implementation that provides domain and IP security checking capab
   "SecretKey": "sk_value"
 }
 ```
+4. The following authorizations are available and are valid for 1 month:  
+`msp-test-pub-2,6e01b7c975b23f87b6b71a7822fa330250997cc2e1b69f3db4638e2a57a0b0a7`
 ## Registering with AI Client
 
 To use this MCP server, you need to register it with your AI client:
